@@ -24,9 +24,9 @@ module BoardGameGrid
     #     ]
     #   })
     def initialize(squares: [])
-      @squares = if squares.all? { |s| s.instance_of?(Hash) }
-        squares.map { |s| BoardGameGrid::Square.new(s) }
-      elsif squares.all? { |s| s.instance_of?(BoardGameGrid::Square) }
+      @squares = if squares.all? { |element| element.instance_of?(Hash) }
+        squares.map { |args| BoardGameGrid::Square.new(args) }
+      elsif squares.all? { |element| element.instance_of?(BoardGameGrid::Square) }
         squares
       else
         raise ArgumentError, "all squares must have the same class"
@@ -142,7 +142,7 @@ module BoardGameGrid
     #   # Find the square with id 4
     #   square_set.find_by_id(4)
     def find_by_id(id)
-      select { |s| s.id == id }.first
+      select { |square| square.id == id }.first
     end
 
     # Find the square with the matching x and y co-ordinates
@@ -158,7 +158,7 @@ module BoardGameGrid
     #   # Find the square at 4,2
     #   square_set.find_by_x_and_y(4, 2)
     def find_by_x_and_y(x, y)
-      select { |s| s.x == x && s.y == y }.first
+      select { |square| square.x == x && square.y == y }.first
     end
 
     # Find all squares within distance of square
@@ -173,8 +173,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares within 2 squares of square_a
     #   square_set.in_range(square_a, 2)
-    def in_range(square, distance)
-      select { |s| Vector.new(square, s).magnitude <= distance }
+    def in_range(origin, distance)
+      select { |square| Vector.new(origin, square).magnitude <= distance }
     end
 
     # Find all squares at distance of square
@@ -189,8 +189,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares at 2 squares from square_a
     #   square_set.at_range(square_a, 2)
-    def at_range(square, distance)
-      select { |s| Vector.new(square, s).magnitude == distance }
+    def at_range(origin, distance)
+      select { |square| Vector.new(origin, square).magnitude == distance }
     end
 
     # Find all squares orthogonal from square
@@ -202,8 +202,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares orthogonal from square_a
     #   square_set.orthogonal(square_a)
-    def orthogonal(square)
-      select { |s| Vector.new(square, s).orthogonal? }
+    def orthogonal(origin)
+      select { |square| Vector.new(origin, square).orthogonal? }
     end
 
     # Find all squares diagonal from square
@@ -215,8 +215,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares diagonal from square_a
     #   square_set.diagonal(square_a)
-    def diagonal(square)
-      select { |s| Vector.new(square, s).diagonal? }
+    def diagonal(origin)
+      select { |square| Vector.new(origin, square).diagonal? }
     end
 
     # Find all squares orthogonal or diagonal from square
@@ -228,8 +228,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares orthogonal or diagonal from square_a
     #   square_set.orthogonal_or_diagonal(square_a)
-    def orthogonal_or_diagonal(square)
-      select { |s| Vector.new(square, s).orthogonal_or_diagonal? }
+    def orthogonal_or_diagonal(origin)
+      select { |square| Vector.new(origin, square).orthogonal_or_diagonal? }
     end
 
     # Find all squares not orthogonal or diagonal from square
@@ -241,8 +241,8 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares not orthogonal or diagonal from square_a
     #   square_set.not_orthogonal_or_diagonal(square_a)
-    def not_orthogonal_or_diagonal(square)
-      select { |s| Vector.new(square, s).not_orthogonal_or_diagonal? }
+    def not_orthogonal_or_diagonal(origin)
+      select { |square| Vector.new(origin, square).not_orthogonal_or_diagonal? }
     end
 
     # Find all squares without pieces on them.
@@ -279,18 +279,18 @@ module BoardGameGrid
     # ==== Example:
     #   # Get all squares between square_a and square_b
     #   square_set.between(square_a, square_b)
-    def between(a, b)
-      vector = Vector.new(a, b)
+    def between(origin, destination)
+      vector = Vector.new(origin, destination)
 
       if vector.diagonal? || vector.orthogonal?
-        point_counter = a.point
+        point_counter = origin.point
         direction = vector.direction
         _squares = []
 
-        while point_counter != b.point
+        while point_counter != destination.point
           point_counter = point_counter + direction
           square = find_by_x_and_y(point_counter.x, point_counter.y)
-          if square && square.point != b.point
+          if square && square.point != destination.point
             _squares.push(square)
           end
         end
