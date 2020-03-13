@@ -14,7 +14,7 @@ describe BoardGameGrid::SquareSet do
     end
 
     it 'must initialize squares from square' do
-      square_set = BoardGameGrid::SquareSet.new(squares: [ BoardGameGrid::Square.new({id: 1, x: 2, y: 3}) ])
+      square_set = BoardGameGrid::SquareSet.new(squares: [ BoardGameGrid::Square.new(id: 1, x: 2, y: 3) ])
       square = square_set.first
 
       assert_equal(1, square.id)
@@ -24,7 +24,7 @@ describe BoardGameGrid::SquareSet do
 
     it 'must raise error if there is a mix of arguments' do
       assert_raises(ArgumentError) {
-        BoardGameGrid::SquareSet.new(squares: [ BoardGameGrid::Square.new({id: 1, x: 2, y: 3}), 'abc' ])
+        BoardGameGrid::SquareSet.new(squares: [ BoardGameGrid::Square.new(id: 1, x: 2, y: 3), 'abc' ])
       }
     end
 
@@ -37,8 +37,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'concat' do
     it 'must combine the squares from both sets' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set_a = BoardGameGrid::SquareSet.new(squares: [ square_a ])
       square_set_b = BoardGameGrid::SquareSet.new(squares: [ square_b ])
@@ -52,8 +52,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'difference' do
     it 'must return a set with squares from the first and not from the second' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set_a = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b])
       square_set_b = BoardGameGrid::SquareSet.new(squares: [ square_b ])
@@ -67,8 +67,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'push' do
     it 'must add square to the set' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a ])
 
@@ -81,9 +81,9 @@ describe BoardGameGrid::SquareSet do
 
   describe 'intersection' do
     it 'must return a set with squares common between the sets' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
-      square_c = BoardGameGrid::Square.new({id: 3, x: 4, y: 5})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 4, y: 5)
 
       square_set_a = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
       square_set_b = BoardGameGrid::SquareSet.new(squares: [ square_b, square_c ])
@@ -98,8 +98,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'select' do
     it 'must return a set with squares matching the block conditions' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
 
@@ -112,8 +112,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'where' do
     it 'must return a set with squares matching the attributes' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
 
@@ -125,8 +125,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'find_by_id' do
     it 'must return a square with the matching id' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
 
@@ -138,8 +138,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'find_by_x_and_y' do
     it 'must return a square with the matching co-ordinates' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 2, y: 3})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 3, y: 4})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
 
@@ -151,10 +151,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'in_range' do
     it 'must return squares within the specified range of origin' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      square_c = BoardGameGrid::Square.new({id: 3, x: 0, y: 2})
-      square_d = BoardGameGrid::Square.new({id: 4, x: 0, y: 3})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 0, y: 2)
+      square_d = BoardGameGrid::Square.new(id: 4, x: 0, y: 3)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b, square_c, square_d ])
 
@@ -168,10 +168,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'at_range' do
     it 'must return squares at the specified range of origin' do
-      square_a = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      square_b = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      square_c = BoardGameGrid::Square.new({id: 3, x: 0, y: 2})
-      square_d = BoardGameGrid::Square.new({id: 4, x: 0, y: 3})
+      square_a = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 0, y: 2)
+      square_d = BoardGameGrid::Square.new(id: 4, x: 0, y: 3)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b, square_c, square_d ])
 
@@ -185,10 +185,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'orthogonal' do
     it 'must return squares orthogonal to the origin' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      orthogonal = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      diagonal = BoardGameGrid::Square.new({id: 3, x: 1, y: 1})
-      l_shape = BoardGameGrid::Square.new({id: 4, x: 1, y: 2})
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      orthogonal = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      diagonal = BoardGameGrid::Square.new(id: 3, x: 1, y: 1)
+      l_shape = BoardGameGrid::Square.new(id: 4, x: 1, y: 2)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, orthogonal, diagonal, l_shape ])
 
@@ -202,10 +202,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'diagonal' do
     it 'must return squares diagonal to the origin' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      orthogonal = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      diagonal = BoardGameGrid::Square.new({id: 3, x: 1, y: 1})
-      l_shape = BoardGameGrid::Square.new({id: 4, x: 1, y: 2})
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      orthogonal = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      diagonal = BoardGameGrid::Square.new(id: 3, x: 1, y: 1)
+      l_shape = BoardGameGrid::Square.new(id: 4, x: 1, y: 2)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, orthogonal, diagonal, l_shape ])
 
@@ -219,10 +219,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'orthogonal_or_diagonal' do
     it 'must return squares orthogonal or diagonal to the origin' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      orthogonal = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      diagonal = BoardGameGrid::Square.new({id: 3, x: 1, y: 1})
-      l_shape = BoardGameGrid::Square.new({id: 4, x: 1, y: 2})
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      orthogonal = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      diagonal = BoardGameGrid::Square.new(id: 3, x: 1, y: 1)
+      l_shape = BoardGameGrid::Square.new(id: 4, x: 1, y: 2)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, orthogonal, diagonal, l_shape ])
 
@@ -236,10 +236,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'not_orthogonal_or_diagonal' do
     it 'must return squares not orthogonal or diagonal to the origin' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0})
-      orthogonal = BoardGameGrid::Square.new({id: 2, x: 0, y: 1})
-      diagonal = BoardGameGrid::Square.new({id: 3, x: 1, y: 1})
-      l_shape = BoardGameGrid::Square.new({id: 4, x: 1, y: 2})
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      orthogonal = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      diagonal = BoardGameGrid::Square.new(id: 3, x: 1, y: 1)
+      l_shape = BoardGameGrid::Square.new(id: 4, x: 1, y: 2)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, orthogonal, diagonal, l_shape ])
 
@@ -253,8 +253,8 @@ describe BoardGameGrid::SquareSet do
 
   describe 'unoccupied' do
     it 'must return squares that are unoccupied' do
-      occupied = BoardGameGrid::Square.new({id: 1, x: 0, y: 0, piece: { player_number: 1 }})
-      unoccupied = BoardGameGrid::Square.new({id: 2, x: 1, y: 1, piece: nil })
+      occupied = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: { player_number: 1 })
+      unoccupied = BoardGameGrid::Square.new(id: 2, x: 1, y: 1, piece: nil)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ occupied, unoccupied ])
 
@@ -267,10 +267,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'unblocked' do
     it 'must return squares that are unblocked from the origin' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0, piece: { player_number: 1 }})
-      unblocked = BoardGameGrid::Square.new({id: 2, x: 0, y: 1, piece: nil })
-      block = BoardGameGrid::Square.new({id: 3, x: 0, y: 2, piece: { player_number: 2 } })
-      beyond = BoardGameGrid::Square.new({id: 4, x: 0, y: 3, piece: nil })
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: { player_number: 1 })
+      unblocked = BoardGameGrid::Square.new(id: 2, x: 0, y: 1, piece: nil)
+      block = BoardGameGrid::Square.new(id: 3, x: 0, y: 2, piece: { player_number: 2 })
+      beyond = BoardGameGrid::Square.new(id: 4, x: 0, y: 3, piece: nil)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, unblocked, block, beyond ])
 
@@ -284,10 +284,10 @@ describe BoardGameGrid::SquareSet do
 
   describe 'between' do
     it 'must return squares between the origin and destination' do
-      origin = BoardGameGrid::Square.new({id: 1, x: 0, y: 0, piece: { player_number: 1 }})
-      between = BoardGameGrid::Square.new({id: 2, x: 0, y: 1, piece: nil })
-      destination = BoardGameGrid::Square.new({id: 3, x: 0, y: 2, piece: { player_number: 2 } })
-      beyond = BoardGameGrid::Square.new({id: 4, x: 0, y: 3, piece: nil })
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: { player_number: 1 })
+      between = BoardGameGrid::Square.new(id: 2, x: 0, y: 1, piece: nil)
+      destination = BoardGameGrid::Square.new(id: 3, x: 0, y: 2, piece: { player_number: 2 })
+      beyond = BoardGameGrid::Square.new(id: 4, x: 0, y: 3, piece: nil)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ origin, between, destination, beyond ])
 
@@ -302,9 +302,9 @@ describe BoardGameGrid::SquareSet do
   describe 'as_json' do
     it 'must return an array of serialised squares' do
       square_a_args = {id: 1, x: 2, y: 3, piece: nil}
-      square_a = BoardGameGrid::Square.new(square_a_args)
+      square_a = BoardGameGrid::Square.new(**square_a_args)
       square_b_args = {id: 2, x: 3, y: 4, piece: nil}
-      square_b = BoardGameGrid::Square.new(square_b_args)
+      square_b = BoardGameGrid::Square.new(**square_b_args)
 
       square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
 

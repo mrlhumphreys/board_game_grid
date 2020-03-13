@@ -25,7 +25,7 @@ module BoardGameGrid
     #   })
     def initialize(squares: [])
       @squares = if squares.all? { |element| element.instance_of?(Hash) }
-        squares.map { |args| BoardGameGrid::Square.new(args) }
+        squares.map { |args| BoardGameGrid::Square.new(**args) }
       elsif squares.all? { |element| element.instance_of?(BoardGameGrid::Square) }
         squares
       else
