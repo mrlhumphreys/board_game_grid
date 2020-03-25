@@ -102,7 +102,24 @@ module BoardGameGrid
     #   # Find the intersection of Squares
     #   square_set & other
     def &(other)
-      select { |square| other.include?(square) }
+      _squares = self.squares & other.squares  
+
+      self.class.new(squares: _squares)
+    end
+
+    # Find the union of Squares between sets
+    #
+    # @param [SquareSet] other
+    #   the second SquareSet
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Find the union of Squares
+    #   square_set | other
+    def |(other)
+      _squares = self.squares | other.squares  
+
+      self.class.new(squares: _squares)
     end
 
     # Filter the squares with a block and behaves like Enumerable#select.
@@ -111,6 +128,16 @@ module BoardGameGrid
     # @return [SquareSet]
     def select(&block)
       _squares = squares.select(&block)
+
+      self.class.new(squares: _squares)
+    end
+
+    # Get unique elements in the set. Behaves like Enumerable#uniq.
+    # It returns a SquareSet with the unique squares.
+    #
+    # @return [SquareSet]
+    def uniq
+      _squares = squares.uniq
 
       self.class.new(squares: _squares)
     end

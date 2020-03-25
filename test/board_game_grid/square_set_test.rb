@@ -96,6 +96,24 @@ describe BoardGameGrid::SquareSet do
     end
   end
 
+  describe 'union' do
+    it 'must return a set of unique squares that are in both sets' do
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 4, y: 5)
+
+      square_set_a = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
+      square_set_b = BoardGameGrid::SquareSet.new(squares: [ square_b, square_c ])
+
+      result = square_set_a | square_set_b
+
+      assert_includes(result, square_a)
+      assert_includes(result, square_b)
+      assert_includes(result, square_c)
+      assert_equal(result.size, 3)
+    end
+  end
+
   describe 'select' do
     it 'must return a set with squares matching the block conditions' do
       square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
@@ -107,6 +125,19 @@ describe BoardGameGrid::SquareSet do
 
       assert_includes(result, square_b)
       refute_includes(result, square_a)
+    end
+  end
+
+  describe 'uniq' do
+    it 'must return a set with uniq squares' do
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_a, square_b ])
+
+      result = square_set.uniq
+
+      assert_equal(result.size, 2)
     end
   end
 
