@@ -113,4 +113,24 @@ describe BoardGameGrid::Vector do
       refute(vector.not_orthogonal_or_diagonal?)
     end
   end
+
+  describe '#dx' do
+    it 'must return the distance on the x axis' do
+      origin = BoardGameGrid::Point.new(3,3)
+      destination = BoardGameGrid::Point.new(5,-5)
+      vector = BoardGameGrid::Vector.new(origin, destination)
+
+      assert_equal(vector.dx, 2)
+    end
+  end
+
+  describe '#dy' do
+    it 'must return the distance on the y axis' do
+      origin = BoardGameGrid::Point.new(3,3)
+      destination = BoardGameGrid::Point.new(5,-5)
+      vector = BoardGameGrid::Vector.new(origin, destination)
+
+      assert_equal(vector.dy, -8)
+    end
+  end
 end

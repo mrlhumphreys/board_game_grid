@@ -73,12 +73,16 @@ module BoardGameGrid
       orthogonal? || diagonal?
     end
 
-    private
-
+    # The distance on the x axis
+    #
+    # @return [Fixnum]
     def dx
       destination.x - origin.x
     end
 
+    # The distance on the y axis
+    #
+    # @return [Fixnum]
     def dy
       destination.y - origin.y
     end

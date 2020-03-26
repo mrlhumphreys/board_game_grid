@@ -214,6 +214,40 @@ describe BoardGameGrid::SquareSet do
     end
   end
 
+  describe 'ranks_away' do
+    it 'must return squares a certain number of ranks away' do
+      square_a = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 0, y: 2)
+      square_d = BoardGameGrid::Square.new(id: 4, x: 0, y: 3)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b, square_c, square_d ])
+
+      result = square_set.ranks_away(square_a, 2)
+
+      refute_includes(result, square_b)
+      assert_includes(result, square_c)
+      refute_includes(result, square_d)
+    end
+  end
+
+  describe 'files_away' do
+    it 'must return squares a certain number of ranks away' do
+      square_a = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 1, y: 0)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 2, y: 0)
+      square_d = BoardGameGrid::Square.new(id: 4, x: 3, y: 0)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b, square_c, square_d ])
+
+      result = square_set.files_away(square_a, 2)
+
+      refute_includes(result, square_b)
+      assert_includes(result, square_c)
+      refute_includes(result, square_d)
+    end
+  end
+
   describe 'orthogonal' do
     it 'must return squares orthogonal to the origin' do
       origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)

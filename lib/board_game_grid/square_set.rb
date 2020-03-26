@@ -220,6 +220,39 @@ module BoardGameGrid
       select { |square| Vector.new(origin, square).magnitude == distance }
     end
 
+
+    # Find all squares a certain number of ranks away 
+    #
+    # @param [Square] origin 
+    #   the originating square
+    #
+    # @param [Fixnum] distance
+    #   the specified distance from the square
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Get all squares at 2 ranks away from square_a
+    #   square_set.ranks_away(square_a, 2)
+    def ranks_away(origin, distance)
+      select { |square| Vector.new(origin, square).dy.abs == distance }
+    end
+
+    # Find all squares a certain number of files away 
+    #
+    # @param [Square] origin 
+    #   the originating square
+    #
+    # @param [Fixnum] distance
+    #   the specified distance from the square
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Get all squares at 2 ranks away from square_a
+    #   square_set.files_away(square_a, 2)
+    def files_away(origin, distance)
+      select { |square| Vector.new(origin, square).dx.abs == distance }
+    end
+
     # Find all squares orthogonal from square
     #
     # @param [Square] square
