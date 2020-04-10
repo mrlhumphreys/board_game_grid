@@ -2,6 +2,10 @@ require 'minitest/spec'
 require 'minitest/autorun'
 require 'board_game_grid/square_set'
 
+module Mock
+  Piece = Struct.new(:id, :player_number, :type) 
+end
+
 describe BoardGameGrid::SquareSet do
   describe 'initialize' do
     it 'must initialize squares from hash' do
@@ -180,6 +184,36 @@ describe BoardGameGrid::SquareSet do
     end
   end
 
+  describe 'find_by_piece_id' do
+    it 'must return a square with the specified piece id' do
+      piece_a = Mock::Piece.new(1, 2, 'pawn')
+      piece_b = Mock::Piece.new(2, 2, 'pawn')
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece_a)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4, piece: piece_b)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b ])
+
+      result = square_set.find_by_piece_id(1)
+
+      assert_equal(square_a, result)
+    end
+  end
+  
+  describe 'in_direction' do
+    it 'must return squares in the direction' do
+      square_a = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: nil)
+      square_b = BoardGameGrid::Square.new(id: 2, x: 3, y: 4, piece: nil)
+      square_c = BoardGameGrid::Square.new(id: 3, x: 4, y: 5, piece: nil)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ square_a, square_b, square_c ])
+
+      result = square_set.in_direction(square_b, -1)
+
+      assert_includes(result, square_a)
+      refute_includes(result, square_c)
+    end
+  end
+
   describe 'in_range' do
     it 'must return squares within the specified range of origin' do
       square_a = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
@@ -313,6 +347,96 @@ describe BoardGameGrid::SquareSet do
       refute_includes(result, orthogonal)
       refute_includes(result, diagonal)
       assert_includes(result, l_shape)
+    end
+  end
+
+  describe 'occupied_by_player' do
+    it 'must return squares occupied by player' do
+      player_piece = Mock::Piece.new(1, 1, 'pawn')
+      player_square = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: player_piece)
+      empty_square = BoardGameGrid::Square.new(id: 2, x: 0, y: 1, piece: nil)
+      opponent_piece = Mock::Piece.new(1, 2, 'pawn')
+      opponent_square = BoardGameGrid::Square.new(id: 3, x: 1, y: 1, piece: opponent_piece)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ player_square, empty_square, opponent_square ])
+
+      result = square_set.occupied_by_player(1)
+
+      assert_includes(result, player_square)
+      refute_includes(result, empty_square)
+      refute_includes(result, opponent_square)
+    end
+  end
+
+  describe 'occupied_by_opponent' do
+    it 'must return squares occupied by opponent' do
+      player_piece = Mock::Piece.new(1, 1, 'pawn')
+      player_square = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: player_piece)
+      empty_square = BoardGameGrid::Square.new(id: 2, x: 0, y: 1, piece: nil)
+      opponent_piece = Mock::Piece.new(1, 2, 'pawn')
+      opponent_square = BoardGameGrid::Square.new(id: 3, x: 1, y: 1, piece: opponent_piece)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ player_square, empty_square, opponent_square ])
+
+      result = square_set.occupied_by_opponent(1)
+
+      refute_includes(result, player_square)
+      refute_includes(result, empty_square)
+      assert_includes(result, opponent_square)
+    end
+  end
+
+  describe 'unoccupied_or_occupied_by_opponent' do
+    it 'must return squares unoccupied or occupied by opponent' do
+      player_piece = Mock::Piece.new(1, 1, 'pawn')
+      player_square = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: player_piece)
+      empty_square = BoardGameGrid::Square.new(id: 2, x: 0, y: 1, piece: nil)
+      opponent_piece = Mock::Piece.new(1, 2, 'pawn')
+      opponent_square = BoardGameGrid::Square.new(id: 3, x: 1, y: 1, piece: opponent_piece)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ player_square, empty_square, opponent_square ])
+
+      result = square_set.unoccupied_or_occupied_by_opponent(1)
+
+      refute_includes(result, player_square)
+      assert_includes(result, empty_square)
+      assert_includes(result, opponent_square)
+    end
+  end
+
+  describe 'occupied_by_piece' do
+    it 'must return squares unoccupied or occupied by opponent' do
+      class Alpha < Mock::Piece; end
+      class Beta < Mock::Piece; end
+      alpha_piece = Alpha.new(1, 1, 'alpha')
+      alpha_square = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: alpha_piece)
+      beta_piece = Beta.new(2, 2, 'beta')
+      beta_square = BoardGameGrid::Square.new(id: 3, x: 1, y: 1, piece: beta_piece)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ alpha_square, beta_square ])
+
+      result = square_set.occupied_by_piece(Alpha)
+
+      assert_includes(result, alpha_square)
+      refute_includes(result, beta_square)
+    end
+  end
+
+  describe 'excluding_piece' do
+    it 'must return squares unoccupied or occupied by opponent' do
+      class Alpha < Mock::Piece; end
+      class Beta < Mock::Piece; end
+      alpha_piece = Alpha.new(1, 1, 'alpha')
+      alpha_square = BoardGameGrid::Square.new(id: 1, x: 0, y: 0, piece: alpha_piece)
+      beta_piece = Beta.new(2, 2, 'beta')
+      beta_square = BoardGameGrid::Square.new(id: 3, x: 1, y: 1, piece: beta_piece)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ alpha_square, beta_square ])
+
+      result = square_set.excluding_piece(Alpha)
+
+      refute_includes(result, alpha_square)
+      assert_includes(result, beta_square)
     end
   end
 

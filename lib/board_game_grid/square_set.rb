@@ -47,6 +47,13 @@ module BoardGameGrid
     def_delegator :squares, :each
     def_delegator :squares, :empty?
 
+    # serializes the squares as a hash
+    #
+    # @return [Hash]
+    def as_json
+      squares.map(&:as_json)
+    end
+
     # Concat two SquareSets together
     #
     # @param [SquareSet] other
@@ -188,6 +195,35 @@ module BoardGameGrid
       select { |square| square.x == x && square.y == y }.first
     end
 
+    # Find the square with the matching piece identifier
+    #
+    # @param [Fixnum] piece_id
+    #   the unique identifier of the piece.
+    #
+    # @return [Square]
+    # ==== example:
+    #   # Find the square with a piece with id 4
+    #   square_set.find_by_piece_id(4)
+    def find_by_piece_id(piece_id)
+      find { |s| s.piece && s.piece.id == piece_id }
+    end
+
+    # Find all squares in the y direction of square
+    #
+    # @param [Square] square
+    #   the originating square
+    #
+    # @param [Fixnum] direction_y
+    #   the direction, either up (-1) or down (1)
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Get all squares up from square_a
+    #   square_set.in_direction(square_a, -1)
+    def in_direction(square, direction_y)
+      select { |s| BoardGameGrid::Vector.new(square, s).direction.y == direction_y }
+    end
+
     # Find all squares within distance of square
     #
     # @param [Square] square
@@ -305,6 +341,56 @@ module BoardGameGrid
       select { |square| Vector.new(origin, square).not_orthogonal_or_diagonal? }
     end
 
+    # Takes a player number and returns all squares occupied by the player
+    #
+    # @param [Fixnum] player_number
+    #   the player's number.
+    #
+    # @return [SquareSet]
+    def occupied_by_player(player_number)
+      select { |s| s.occupied_by_player?(player_number) }
+    end
+
+    # Takes a player number and returns all squares occupied by the opponent of the player
+    #
+    # @param [Fixnum] player_number
+    #   the player's number.
+    #
+    # @return [SquareSet]
+    def occupied_by_opponent(player_number)
+      select { |s| s.occupied_by_opponent?(player_number) }
+    end
+
+    # Takes a player number and returns all squares unoccupied or occupied by the opponent of the player
+    #
+    # @param [Fixnum] player_number
+    #   the player's number.
+    #
+    # @return [SquareSet]
+    def unoccupied_or_occupied_by_opponent(player_number)
+      select { |s| s.unoccupied? || s.occupied_by_opponent?(player_number) }
+    end
+
+    # Find all squares occupied by a piece of a particular type
+    #
+    # @param [Class] piece_type
+    #   the class of the piece.
+    #
+    # @return [SquareSet]
+    def occupied_by_piece(piece_type)
+      select { |s| s.piece && s.piece.is_a?(piece_type) }
+    end
+
+    # Find all squares occupied by a piece not of a particular type
+    #
+    # @param [Class] piece_type
+    #   the class of the piece.
+    #
+    # @return [SquareSet]
+    def excluding_piece(piece_type)
+      select { |s| s.piece && !s.piece.is_a?(piece_type) }
+    end
+
     # Find all squares without pieces on them.
     #
     # @return [SquareSet]
@@ -359,13 +445,6 @@ module BoardGameGrid
       end
 
       self.class.new(squares: _squares)
-    end
-
-    # serializes the squares as a hash
-    #
-    # @return [Hash]
-    def as_json
-      squares.map(&:as_json)
     end
   end
 end

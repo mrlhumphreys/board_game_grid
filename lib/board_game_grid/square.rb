@@ -48,6 +48,18 @@ module BoardGameGrid
     # @return [Hash,NilClass] The piece on the square if any.
     attr_accessor :piece
 
+    # A serialized version of the square as a hash
+    #
+    # @return [Hash]
+    def as_json
+      { 
+        id: id, 
+        x: x, 
+        y: y, 
+        piece: piece && piece.as_json
+      }
+    end
+
     # checks if the square matches the attributes passed.
     #
     # @param [Symbol] attribute
@@ -86,6 +98,20 @@ module BoardGameGrid
       !piece
     end
 
+    # Is the square occupied by the specified player?
+    #
+    # @return [Boolean]
+    def occupied_by_player?(player_number)
+      piece && piece.player_number == player_number
+    end
+
+    # Is the square occupied by the specified player?
+    #
+    # @return [Boolean]
+    def occupied_by_opponent?(player_number)
+      piece && piece.player_number != player_number
+    end
+
     # Is the square the same as another one?
     #
     # @return [Boolean]
@@ -100,11 +126,5 @@ module BoardGameGrid
       Point.new(x, y)
     end
 
-    # A serialized version of the square as a hash
-    #
-    # @return [Hash]
-    def as_json
-      { id: id, x: x, y: y, piece: piece }
-    end
   end
 end
