@@ -1,22 +1,13 @@
 require 'minitest/spec'
 require 'minitest/autorun'
 require 'board_game_grid/square'
-
-Piece = Struct.new(:id, :player_number, :type) do 
-  def as_json
-    {
-      id: id,
-      player_number: player_number,
-      type: type
-    }
-  end
-end
+require 'board_game_grid/piece'
 
 describe BoardGameGrid::Square do
   describe 'as_json' do
     describe 'with piece' do
       it 'serializes the square into a hash' do
-        piece = Piece.new(1, 1, 'pawn')
+        piece = BoardGameGrid::Piece.new(id: 1, player_number: 1, type: 'piece')
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
 
         result = square.as_json
@@ -24,7 +15,7 @@ describe BoardGameGrid::Square do
           id: 1,
           x: 2,
           y: 3, 
-          piece: { id: 1, player_number: 1, type: 'pawn' }
+          piece: { id: 1, player_number: 1, type: 'piece' }
         }
 
         assert_equal(expected, result) 
@@ -34,8 +25,16 @@ describe BoardGameGrid::Square do
     describe 'without piece' do
       it 'serializes the square into a hash' do
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: nil)
+        expected = {
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: nil
+        }
 
         result = square.as_json
+
+        assert_equal(expected, result)
       end
     end
   end
@@ -103,7 +102,7 @@ describe BoardGameGrid::Square do
   describe 'occupied_by_player?' do
     describe 'when piece owner matches player number' do
       it 'must return true' do
-        piece = Piece.new(1, 1, 'pawn') 
+        piece = BoardGameGrid::Piece.new(id: 1, player_number: 1, type: 'piece') 
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
 
         assert square.occupied_by_player?(1)
@@ -112,7 +111,7 @@ describe BoardGameGrid::Square do
 
     describe 'when piece owner does not match player number' do
       it 'must return false' do
-        piece = Piece.new(1, 1, 'pawn') 
+        piece = BoardGameGrid::Piece.new(id: 1, player_number: 1, type: 'piece') 
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
 
         refute square.occupied_by_player?(2)
@@ -123,7 +122,7 @@ describe BoardGameGrid::Square do
   describe 'occupied_by_opponent?' do
     describe 'when piece owner does not match player number' do
       it 'must return true' do
-        piece = Piece.new(1, 2, 'pawn') 
+        piece = BoardGameGrid::Piece.new(id: 1, player_number: 2, type: 'piece') 
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
 
         assert square.occupied_by_opponent?(1)
@@ -132,7 +131,7 @@ describe BoardGameGrid::Square do
 
     describe 'when piece owner does match player number' do
       it 'must return false' do
-        piece = Piece.new(1, 2, 'pawn') 
+        piece = BoardGameGrid::Piece.new(id: 1, player_number: 2, type: 'piece') 
         square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
 
         refute square.occupied_by_opponent?(2)
