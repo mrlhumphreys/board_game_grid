@@ -76,6 +76,8 @@ module BoardGameGrid
         value = obj.send(k)
         if !value.nil? && v.is_a?(Hash)
           v.all? { |k2,v2| hash_obj_matcher.call(value, k2, v2) }
+        elsif v.is_a?(Array) && !value.is_a?(Array)
+          v.include?(value)
         else
           value == v
         end
