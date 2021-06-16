@@ -74,10 +74,12 @@ module BoardGameGrid
     def attribute_match?(attribute, value)
       hash_obj_matcher = lambda do |obj, k, v|
         value = obj.send(k)
-        if !value.nil? && v.is_a?(Hash)
+        if v.is_a?(Hash) && !value.nil?
           v.all? { |k2,v2| hash_obj_matcher.call(value, k2, v2) }
         elsif v.is_a?(Array) && !value.is_a?(Array)
           v.include?(value)
+        elsif v.is_a?(Proc)
+          v.call(value)
         else
           value == v
         end

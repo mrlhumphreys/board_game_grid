@@ -79,6 +79,20 @@ describe BoardGameGrid::Square do
 
       refute square.attribute_match?(:x, [4, 5, 6])
     end
+
+    it 'must return true if attribute matches proc' do
+      piece = Struct.new(:player_number).new(4)
+      square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
+
+      assert square.attribute_match?(:y, -> (y) { y >= 2 })
+    end
+
+    it 'must return false if attribute does not match proc' do
+      piece = Struct.new(:player_number).new(4)
+      square = BoardGameGrid::Square.new(id: 1, x: 2, y: 3, piece: piece)
+
+      refute square.attribute_match?(:y, -> (y) { y <= 2 })
+    end
   end
 
   describe 'occupied?' do
