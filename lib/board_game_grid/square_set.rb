@@ -289,6 +289,32 @@ module BoardGameGrid
       select { |square| Vector.new(origin, square).dx.abs == distance }
     end
 
+    # Find all squares in the same rank as square
+    #
+    # @param [Square] square
+    #   the originating square
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Get all squares in the same rank as square_a
+    #   square_set.same_rank(square_a)
+    def same_rank(origin)
+      select { |square| square.y == origin.y }
+    end
+
+    # Find all squares in the same file as square
+    #
+    # @param [Square] square
+    #   the originating square
+    #
+    # @return [SquareSet]
+    # ==== Example:
+    #   # Get all squares in the same file as square_a
+    #   square_set.same_file(square_a)
+    def same_file(origin)
+      select { |square| square.x == origin.x }
+    end
+
     # Find all squares orthogonal from square
     #
     # @param [Square] square

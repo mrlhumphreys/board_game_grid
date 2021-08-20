@@ -282,6 +282,34 @@ describe BoardGameGrid::SquareSet do
     end
   end
 
+  describe 'same_rank' do
+    it 'must return squares in the same ranke' do
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      same_rank = BoardGameGrid::Square.new(id: 2, x: 1, y: 0)
+      same_file = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ origin, same_rank, same_file ])
+
+      result = square_set.same_file(origin)
+
+      assert_includes(result, same_file)
+    end
+  end
+
+  describe 'same_file' do
+    it 'must return squares in the same file' do
+      origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
+      same_rank = BoardGameGrid::Square.new(id: 2, x: 1, y: 0)
+      same_file = BoardGameGrid::Square.new(id: 2, x: 0, y: 1)
+
+      square_set = BoardGameGrid::SquareSet.new(squares: [ origin, same_rank, same_file ])
+
+      result = square_set.same_rank(origin)
+
+      assert_includes(result, same_rank)
+    end
+  end
+
   describe 'orthogonal' do
     it 'must return squares orthogonal to the origin' do
       origin = BoardGameGrid::Square.new(id: 1, x: 0, y: 0)
